@@ -6,9 +6,9 @@ class Conexion:
         try:
             conexion = mysql.connector.connect(
                 user='root',
-                password='',  # Ajusta según tu configuración
+                password='7894',  # Ajusta según tu configuración
                 host='127.0.0.1',
-                database='login',
+                database='superestrellanomina',
                 port='3306'
             )
             return conexion

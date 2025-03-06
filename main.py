@@ -1,8 +1,8 @@
 from tkinter import messagebox
 import customtkinter as ctk
 from conexion import Conexion
-from Modulo_Nomina import main_nomina
-from Modulo_Inventario import main_inventario
+from Modulo_Administrador.main_administrator import AdministratorInterface
+from Modulo_Trabajador.main_employee import InventarioInterface
 
 class Main:
     def __init__(self):
@@ -42,16 +42,16 @@ class Main:
 
         if self.conn:
             cursor = self.conn.cursor()
-            query = "SELECT tipo_usuario FROM usuarios WHERE usuario = %s AND contraseña = %s"
+            query = "SELECT rol FROM Usuario WHERE nombre_usuario = %s AND contrasena = %s"
             cursor.execute(query, (user, password))
             result = cursor.fetchone()
 
             if result:
-                tipo_usuario = result[0]
-                if tipo_usuario == "NOMINA":
-                    self.abrir_nomina()
-                elif tipo_usuario == "INVENTARIO":
-                    self.abrir_inventario()
+                rol = result[0]
+                if rol == "Gerente":
+                    self.abrir_administrador()
+                elif rol == "Empleado":
+                    self.abrir_trabajador()
                 else:
                     messagebox.showerror("Error", "Tipo de usuario no reconocido")
             else:
@@ -61,13 +61,13 @@ class Main:
         else:
             messagebox.showerror("Error", "No hay conexión a la base de datos")
 
-    def abrir_nomina(self):
-        self.root.withdraw()
-        main_nomina.NominaInterface(self.root)
+    def abrir_administrador(self):
+        self.root.withdraw()  # Oculta la ventana actual
+        self.admin_window = AdministratorInterface()  # Guarda la referencia
 
-    def abrir_inventario(self):
-        self.root.withdraw()
-        main_inventario.InventarioInterface(self.root)
+    def abrir_trabajador(self):
+        self.root.withdraw()  # Oculta la ventana actual
+        self.trabajador_window = InventarioInterface()  # Guarda la referencia
 
     def on_closing(self):
         """Cerrar conexión al salir"""
